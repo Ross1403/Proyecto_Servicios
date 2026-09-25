@@ -21,8 +21,9 @@ $sql = "SELECT * FROM usuarios WHERE 1=1";
 $params = [];
 
 if ($q !== '') {
-    $sql .= " AND (nombre LIKE :q OR correo LIKE :q)";
-    $params[':q'] = '%' . $q . '%';
+    $sql .= " AND (nombre LIKE :q1 OR correo LIKE :q2)";
+    $params[':q1'] = '%' . $q . '%';
+    $params[':q2'] = '%' . $q . '%';
 }
 $sql .= " ORDER BY rol ASC, nombre ASC";
 

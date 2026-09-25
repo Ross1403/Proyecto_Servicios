@@ -52,7 +52,7 @@ if ($depth <= 1) $base = '';
                 <ul class="footer-links">
                     <li><i class="bi bi-envelope me-2"></i><a href="mailto:contacto@devioz.com">contacto@devioz.com</a></li>
                     <li><i class="bi bi-telephone me-2"></i><a href="tel:+51014567890">+51 (01) 456-7890</a></li>
-                    <li><i class="bi bi-geo-alt me-2"></i>San Isidro, Lima, Perú</li>
+                    <li><i class="bi bi-geo-alt me-2"></i>NRO. 0 DPTO. 302 URB. MANZANILLA (BLOCK G08) LIMA - LIMA - LIMA</li>
                     <li>
                         <a href="<?= $base ?>contacto.php" class="btn btn-accent btn-sm mt-2">
                             <i class="bi bi-chat-dots me-1"></i>Enviar mensaje

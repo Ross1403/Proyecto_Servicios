@@ -24,12 +24,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
 
     // ---- Recoger y sanitizar datos ----
-    $nombre   = trim(filter_input(INPUT_POST, 'nombre',   FILTER_SANITIZE_SPECIAL_CHARS));
-    $empresa  = trim(filter_input(INPUT_POST, 'empresa',  FILTER_SANITIZE_SPECIAL_CHARS));
-    $correo   = trim(filter_input(INPUT_POST, 'correo',   FILTER_SANITIZE_EMAIL));
-    $telefono = trim(filter_input(INPUT_POST, 'telefono', FILTER_SANITIZE_SPECIAL_CHARS));
-    $servicio = trim(filter_input(INPUT_POST, 'servicio', FILTER_SANITIZE_SPECIAL_CHARS));
-    $mensaje  = trim(filter_input(INPUT_POST, 'mensaje',  FILTER_SANITIZE_SPECIAL_CHARS));
+    $nombre   = trim($_POST['nombre'] ?? '');
+    $empresa  = trim($_POST['empresa'] ?? '');
+    $correo   = trim(filter_input(INPUT_POST, 'correo', FILTER_SANITIZE_EMAIL));
+    $telefono = trim($_POST['telefono'] ?? '');
+    $servicio = trim($_POST['servicio'] ?? '');
+    $mensaje  = trim($_POST['mensaje'] ?? '');
 
     // ---- Validaciones server-side ----
     $errors = [];
@@ -231,7 +231,7 @@ include 'includes/navbar.php';
                             </div>
                             <div>
                                 <p style="font-size:.78rem;color:var(--text-muted);margin:0">Oficina</p>
-                                <p class="fw-bold mb-0" style="font-size:.9rem">San Isidro, Lima, Perú</p>
+                                <p class="fw-bold mb-0" style="font-size:.9rem">NRO. 0 DPTO. 302 URB. MANZANILLA (BLOCK G08) LIMA - LIMA - LIMA</p>
                             </div>
                         </div>
                         <div class="d-flex gap-3 align-items-start">

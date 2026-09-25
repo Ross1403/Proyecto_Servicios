@@ -28,7 +28,7 @@ $stmtP = $db->prepare("
            (SELECT COUNT(*) FROM logros l WHERE l.id_proyecto = p.id_proyecto) AS total_logros
     FROM proyectos p
     WHERE p.id_cliente = :id
-    ORDER BY p.fecha_inicio DESC
+    ORDER BY p.fecha_inicio ASC
 ");
 $stmtP->execute([':id' => $id]);
 $proyectos = $stmtP->fetchAll();

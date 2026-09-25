@@ -20,8 +20,9 @@ $sql = "SELECT l.*, p.nombre AS proyecto_nombre, c.nombre AS cliente_nombre
 $params = [];
 
 if ($q !== '') {
-    $sql .= " AND (l.titulo LIKE :q OR l.descripcion LIKE :q)";
-    $params[':q'] = '%' . $q . '%';
+    $sql .= " AND (l.titulo LIKE :q1 OR l.descripcion LIKE :q2)";
+    $params[':q1'] = '%' . $q . '%';
+    $params[':q2'] = '%' . $q . '%';
 }
 if ($proyecto) {
     $sql .= " AND l.id_proyecto = :proyecto";

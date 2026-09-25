@@ -124,10 +124,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="col-md-6">
                         <div class="form-group-admin">
-                            <label class="form-label-admin">Clase de icono de Bootstrap</label>
+                            <label class="form-label-admin">Icono del servicio</label>
                             <div class="input-group">
                                 <span class="input-group-text" style="background:var(--admin-input); border:1px solid var(--admin-border); color:var(--text-muted);"><i id="iconPreview" class="bi <?= htmlspecialchars($servicio['icono']) ?>"></i></span>
-                                <input type="text" name="icono" id="iconInput" class="form-control-admin" value="<?= htmlspecialchars($servicio['icono']) ?>" style="border-top-left-radius:0; border-bottom-left-radius:0;">
+                                <select name="icono" id="iconInput" class="form-control-admin" style="border-top-left-radius:0; border-bottom-left-radius:0;">
+                                    <?php
+                                    $icons = [
+                                        'bi-gear' => 'Engranaje (General)',
+                                        'bi-code-slash' => 'Código (Desarrollo Web)',
+                                        'bi-laptop' => 'Laptop (Tecnología)',
+                                        'bi-phone' => 'Teléfono (Móvil)',
+                                        'bi-cloud' => 'Nube (Cloud / Servidores)',
+                                        'bi-shield-check' => 'Escudo (Seguridad)',
+                                        'bi-graph-up' => 'Gráfico (Marketing / SEO)',
+                                        'bi-headset' => 'Auriculares (Soporte)',
+                                        'bi-bezier2' => 'Vector (Diseño UI/UX)',
+                                        'bi-cart3' => 'Carrito (E-commerce)',
+                                        'bi-server' => 'Servidor (Infraestructura)',
+                                        'bi-database' => 'Base de datos'
+                                    ];
+                                    $selectedIcon = $servicio['icono'] ?? 'bi-gear';
+                                    foreach ($icons as $class => $label) {
+                                        $sel = ($class === $selectedIcon) ? 'selected' : '';
+                                        echo "<option value=\"$class\" $sel>$label</option>";
+                                    }
+                                    ?>
+                                </select>
                             </div>
                         </div>
                     </div>
