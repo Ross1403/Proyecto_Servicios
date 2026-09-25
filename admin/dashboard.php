@@ -41,9 +41,9 @@ $ultimosContactos = $db->query("
 
 // ---- Proyectos recientes ----
 $proyectosRecientes = $db->query("
-    SELECT p.nombre, p.estado, p.created_at, c.nombre AS cliente
+    SELECT p.nombre, p.estado, p.id_proyecto, c.nombre AS cliente
     FROM proyectos p INNER JOIN clientes c ON c.id_cliente = p.id_cliente
-    ORDER BY p.created_at DESC LIMIT 5
+    ORDER BY p.id_proyecto DESC LIMIT 5
 ")->fetchAll();
 ?>
 <!DOCTYPE html>
@@ -273,7 +273,7 @@ $proyectosRecientes = $db->query("
                                 <td style="color:var(--text-primary);font-weight:600"><?= htmlspecialchars($pr['nombre']) ?></td>
                                 <td><?= htmlspecialchars($pr['cliente']) ?></td>
                                 <td><span class="badge-admin <?= $pCls ?>"><?= $pr['estado'] ?></span></td>
-                                <td><?= date('d M Y', strtotime($pr['created_at'])) ?></td>
+                                <td>#<?= $pr['id_proyecto'] ?></td>
                                 <td>
                                     <a href="/Proyecto_Servicios/admin/proyectos/listar.php" class="btn-admin-edit btn-admin-sm">
                                         <i class="bi bi-pencil"></i> Gestionar

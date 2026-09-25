@@ -56,11 +56,6 @@ unset($_SESSION['flash']);
 <div class="admin-topbar">
     <button class="topbar-toggle" id="sidebarOpen"><i class="bi bi-list"></i></button>
     <span class="topbar-title">Clientes</span>
-    <div class="topbar-actions">
-        <a href="/Proyecto_Servicios/admin/clientes/crear.php" class="btn-admin-primary">
-            <i class="bi bi-plus-lg"></i> Nuevo cliente
-        </a>
-    </div>
 </div>
 <div class="admin-page">
     <?php if ($flash): ?>

@@ -10,9 +10,8 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 if (empty($_SESSION['admin_id']) || empty($_SESSION['admin_rol'])) {
-    // Guardar URL de destino para redirigir después del login
     $_SESSION['redirect_after_login'] = $_SERVER['REQUEST_URI'];
-    header('Location: ' . rtrim(dirname($_SERVER['SCRIPT_NAME'], 2), '/') . '/../admin/login.php');
+    header('Location: /Proyecto_Servicios/admin/login.php');
     exit;
 }
 
