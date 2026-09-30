@@ -38,15 +38,17 @@ CREATE TABLE IF NOT EXISTS servicios (
 -- TABLA: clientes
 -- ============================================================
 CREATE TABLE IF NOT EXISTS clientes (
-    id_cliente      INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    nombre          VARCHAR(120) NOT NULL,
-    descripcion     TEXT,
-    sector          VARCHAR(80),
-    logo            VARCHAR(255),
-    web             VARCHAR(255),
-    estado          TINYINT(1) NOT NULL DEFAULT 1,
-    destacado       TINYINT(1) NOT NULL DEFAULT 0,
-    fecha_registro  DATE NOT NULL
+    id_cliente           INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nombre               VARCHAR(120) NOT NULL,
+    razon_social         VARCHAR(150),
+    descripcion          TEXT,
+    sector               VARCHAR(80),
+    logo                 VARCHAR(255),
+    web                  VARCHAR(255),
+    anio_inicio_relacion YEAR,
+    estado               TINYINT(1) NOT NULL DEFAULT 1,
+    destacado            TINYINT(1) NOT NULL DEFAULT 0,
+    fecha_registro       DATE NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
@@ -58,6 +60,9 @@ CREATE TABLE IF NOT EXISTS proyectos (
     nombre       VARCHAR(150) NOT NULL,
     descripcion  TEXT,
     tecnologias  VARCHAR(255),
+    problema     TEXT,
+    solucion     TEXT,
+    resultado    TEXT,
     fecha_inicio DATE,
     fecha_fin    DATE,
     estado       ENUM('Planificado','En desarrollo','Finalizado','Suspendido') NOT NULL DEFAULT 'Planificado',
