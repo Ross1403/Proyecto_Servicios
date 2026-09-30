@@ -38,6 +38,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':total' => $total
         ]);
 
+        $id_nueva_cotizacion = $db->lastInsertId();
+
+        // Enviar evento para Notificación en Tiempo Real (SSE)
+        $notif = $db->prepare("INSERT INTO notificaciones (tipo, mensaje, url) VALUES ('cotizacion', :msg, :url)");
+        $notif->execute([
+            ':msg' => "Nueva cotización de {$empresa} por $" . number_format($total, 2),
+            ':url' => "/Proyecto_Servicios/admin/cotizaciones/detalles.php?id=" . $id_nueva_cotizacion
+        ]);
+
         echo json_encode(['success' => true]);
     } catch (PDOException $e) {
         error_log("Error guardando cotizacion: " . $e->getMessage());

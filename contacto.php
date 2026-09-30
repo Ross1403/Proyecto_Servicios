@@ -66,6 +66,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':mensaje'  => $mensaje,
             ]);
 
+            // SSE Real Time Notification
+            $notif = $db->prepare("INSERT INTO notificaciones (tipo, mensaje, url) VALUES ('contacto', :msg, :url)");
+            $notif->execute([
+                ':msg' => "Nuevo mensaje de {$nombre}",
+                ':url' => "/Proyecto_Servicios/admin/contactos/listar.php"
+            ]);
+
             if ($isAjax) {
                 header('Content-Type: application/json');
                 echo json_encode(['success' => true, 'mensaje' => '¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.']);

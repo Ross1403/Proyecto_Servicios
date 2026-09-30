@@ -30,6 +30,26 @@ function sidebarItem(string $href, string $icon, string $label, string $active, 
                 form.appendChild(input);
             }
         });
+        
+        // --- SSE: Notificaciones en Tiempo Real ---
+        if (typeof EventSource !== "undefined") {
+            const source = new EventSource("/Proyecto_Servicios/api/v1/sse-notificaciones.php");
+            source.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                if (data.notificaciones && data.notificaciones.length > 0) {
+                    data.notificaciones.forEach(notif => {
+                        // Utilizar la función showToast global de admin.js
+                        if(typeof showToast === 'function') {
+                            const link = notif.url ? `<a href="${notif.url}" class="text-white ms-2 text-decoration-underline" style="font-size:0.8rem">Ver detalle</a>` : '';
+                            showToast(`<b>NUEVA NOTIFICACIÓN:</b> ${notif.mensaje} ${link}`, 'primary');
+                        }
+                    });
+                }
+            };
+            source.onerror = function(event) {
+                console.log("Conexión SSE perdida o en reconexión...");
+            };
+        }
     });
 </script>
 <aside class="admin-sidebar d-flex flex-column" id="adminSidebar">

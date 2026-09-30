@@ -120,6 +120,18 @@ CREATE TABLE IF NOT EXISTS cotizaciones (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
+-- TABLA: notificaciones (Módulo de Tiempo Real SSE)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS notificaciones (
+    id_notificacion INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    tipo            VARCHAR(50) NOT NULL,
+    mensaje         VARCHAR(255) NOT NULL,
+    url             VARCHAR(255) NOT NULL,
+    leido           TINYINT(1) DEFAULT 0,
+    fecha           TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================
 -- SEED DATA — USUARIOS
 -- Password: Admin2024! (hasheado con PASSWORD_BCRYPT)
 -- ============================================================
