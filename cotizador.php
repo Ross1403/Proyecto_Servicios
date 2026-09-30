@@ -11,75 +11,77 @@ $stmt = $db->query("SELECT id_servicio, nombre, descripcion, precio_base FROM se
 $servicios = $stmt->fetchAll();
 ?>
 
-<div class="container py-5 mt-5">
-    <div class="row mb-5 text-center">
-        <div class="col-12">
-            <h1 class="display-4 fw-bold text-primary">Cotizador Inteligente</h1>
-            <p class="lead text-muted">Estima el costo de tu proyecto tecnológico al instante y obtén una propuesta formal.</p>
+<section class="page-content py-5">
+    <div class="container">
+        <div class="row mb-5 text-center">
+            <div class="col-12 fade-in-up">
+                <span class="section-badge">Motor Inteligente</span>
+                <h1 class="section-title">Cotizador <span class="gradient-text">Online</span></h1>
+                <p class="section-subtitle">Estima el costo de tu proyecto tecnológico al instante y obtén una propuesta formal en PDF.</p>
+            </div>
         </div>
-    </div>
 
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-lg border-0 rounded-4">
-                <div class="card-body p-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 fade-in-up delay-1">
+                <div class="card-glass border-0">
+                    <div class="card-body p-2 p-md-4">
                     <form id="cotizadorForm">
                         
                         <!-- Paso 1: Datos Básicos -->
                         <div class="step" id="step1">
-                            <h4 class="mb-4 text-secondary"><i class="bi bi-person-badge me-2"></i>1. Datos de Contacto</h4>
-                            <div class="row g-3">
+                            <h4 class="mb-4 text-primary-custom"><i class="bi bi-person-badge me-2"></i>1. Datos de Contacto</h4>
+                            <div class="row g-4">
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">Nombre Completo *</label>
-                                    <input type="text" class="form-control form-control-lg" name="nombre" required>
+                                    <label class="form-label text-secondary-custom fw-bold">Nombre Completo *</label>
+                                    <input type="text" class="input-dark" name="nombre" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">Empresa *</label>
-                                    <input type="text" class="form-control form-control-lg" name="empresa" required>
+                                    <label class="form-label text-secondary-custom fw-bold">Empresa *</label>
+                                    <input type="text" class="input-dark" name="empresa" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">Correo Electrónico *</label>
-                                    <input type="email" class="form-control form-control-lg" name="correo" required>
+                                    <label class="form-label text-secondary-custom fw-bold">Correo Electrónico *</label>
+                                    <input type="email" class="input-dark" name="correo" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">Teléfono</label>
-                                    <input type="text" class="form-control form-control-lg" name="telefono">
+                                    <label class="form-label text-secondary-custom fw-bold">Teléfono</label>
+                                    <input type="text" class="input-dark" name="telefono">
                                 </div>
                             </div>
-                            <div class="text-end mt-4">
-                                <button type="button" class="btn btn-primary btn-lg px-5" onclick="nextStep(2)">Siguiente <i class="bi bi-arrow-right"></i></button>
+                            <div class="text-end mt-5">
+                                <button type="button" class="btn-accent px-5 py-2" onclick="nextStep(2)">Siguiente <i class="bi bi-arrow-right ms-2"></i></button>
                             </div>
                         </div>
 
                         <!-- Paso 2: Selección de Servicios -->
                         <div class="step d-none" id="step2">
-                            <h4 class="mb-4 text-secondary"><i class="bi bi-cpu me-2"></i>2. ¿Qué servicios necesitas?</h4>
+                            <h4 class="mb-4 text-primary-custom"><i class="bi bi-cpu me-2"></i>2. ¿Qué servicios necesitas?</h4>
                             <div class="row g-3">
                                 <?php foreach ($servicios as $s): ?>
                                 <div class="col-md-6">
-                                    <div class="form-check custom-checkbox-card h-100 p-3 border rounded-3 position-relative">
+                                    <div class="form-check custom-checkbox-card h-100 p-3 rounded-custom position-relative">
                                         <input class="form-check-input position-absolute top-0 end-0 m-3" type="checkbox" name="servicios[]" value="<?= htmlspecialchars($s['nombre']) ?>" data-precio="<?= $s['precio_base'] ?>" id="srv_<?= $s['id_servicio'] ?>">
                                         <label class="form-check-label w-100 stretched-link" for="srv_<?= $s['id_servicio'] ?>">
-                                            <h6 class="fw-bold mb-1"><?= htmlspecialchars($s['nombre']) ?></h6>
-                                            <p class="small text-muted mb-0"><?= htmlspecialchars(mb_strimwidth($s['descripcion'], 0, 80, '...')) ?></p>
+                                            <h6 class="fw-bold mb-1 text-text-primary"><?= htmlspecialchars($s['nombre']) ?></h6>
+                                            <p class="small text-muted-custom mb-0"><?= htmlspecialchars(mb_strimwidth($s['descripcion'], 0, 80, '...')) ?></p>
                                         </label>
                                     </div>
                                 </div>
                                 <?php endforeach; ?>
                             </div>
-                            <div class="d-flex justify-content-between mt-4">
-                                <button type="button" class="btn btn-outline-secondary btn-lg" onclick="nextStep(1)"><i class="bi bi-arrow-left"></i> Atrás</button>
-                                <button type="button" class="btn btn-primary btn-lg px-5" onclick="nextStep(3)">Siguiente <i class="bi bi-arrow-right"></i></button>
+                            <div class="d-flex justify-content-between mt-5">
+                                <button type="button" class="btn-outline-custom" onclick="nextStep(1)"><i class="bi bi-arrow-left me-2"></i> Atrás</button>
+                                <button type="button" class="btn-accent px-5" onclick="nextStep(3)">Siguiente <i class="bi bi-arrow-right ms-2"></i></button>
                             </div>
                         </div>
 
                         <!-- Paso 3: Detalles y Estimación -->
                         <div class="step d-none" id="step3">
-                            <h4 class="mb-4 text-secondary"><i class="bi bi-speedometer2 me-2"></i>3. Complejidad del Proyecto</h4>
+                            <h4 class="mb-4 text-primary-custom"><i class="bi bi-speedometer2 me-2"></i>3. Complejidad del Proyecto</h4>
                             
                             <div class="mb-4">
-                                <label class="form-label fw-bold">Tamaño de la Empresa</label>
-                                <select class="form-select form-select-lg" name="tamanio" id="tamanio">
+                                <label class="form-label text-secondary-custom fw-bold">Tamaño de la Empresa</label>
+                                <select class="input-dark" name="tamanio" id="tamanio">
                                     <option value="1">Micro (1-10 empleados) - Base</option>
                                     <option value="1.5">Pyme (11-50 empleados) - +50%</option>
                                     <option value="2">Mediana (51-200 empleados) - +100%</option>
@@ -87,22 +89,22 @@ $servicios = $stmt->fetchAll();
                                 </select>
                             </div>
                             <div class="mb-4">
-                                <label class="form-label fw-bold">Urgencia del Proyecto</label>
-                                <select class="form-select form-select-lg" name="urgencia" id="urgencia">
+                                <label class="form-label text-secondary-custom fw-bold">Urgencia del Proyecto</label>
+                                <select class="input-dark" name="urgencia" id="urgencia">
                                     <option value="1">Estándar (Planificación normal)</option>
                                     <option value="1.2">Alta Urgencia - +20% (Prioridad)</option>
                                 </select>
                             </div>
                             
-                            <div class="alert alert-info mt-4 p-4 rounded-3 border-0 bg-opacity-10 bg-primary">
-                                <h5 class="alert-heading fw-bold"><i class="bi bi-calculator me-2"></i>Presupuesto Estimado</h5>
-                                <h2 class="display-5 fw-bold text-primary mb-0" id="totalEstimado">$0.00 <span class="fs-6 text-muted fw-normal">USD (Aprox)</span></h2>
-                                <p class="mb-0 mt-2 small text-muted">* Esta es una estimación referencial basada en tarifas estándar. No constituye un contrato vinculante.</p>
+                            <div class="mt-5 p-4 rounded-lg-custom border-custom text-center" style="background: rgba(108, 99, 255, 0.1);">
+                                <h5 class="fw-bold text-primary-custom mb-3"><i class="bi bi-calculator me-2"></i>Presupuesto Estimado</h5>
+                                <h2 class="display-4 fw-bold gradient-text mb-0" id="totalEstimado">$0.00 <span class="fs-5 text-secondary-custom fw-normal">USD (Aprox)</span></h2>
+                                <p class="mb-0 mt-3 small text-muted-custom">* Esta es una estimación referencial basada en tarifas estándar. No constituye un contrato vinculante.</p>
                             </div>
 
-                            <div class="d-flex justify-content-between mt-4">
-                                <button type="button" class="btn btn-outline-secondary btn-lg" onclick="nextStep(2)"><i class="bi bi-arrow-left"></i> Atrás</button>
-                                <button type="submit" class="btn btn-success btn-lg px-4" id="btnGenerar">
+                            <div class="d-flex justify-content-between mt-5">
+                                <button type="button" class="btn-outline-custom" onclick="nextStep(2)"><i class="bi bi-arrow-left me-2"></i> Atrás</button>
+                                <button type="submit" class="btn-accent px-4" id="btnGenerar">
                                     <i class="bi bi-file-earmark-pdf me-2"></i>Generar y Enviar Propuesta
                                 </button>
                             </div>
@@ -113,7 +115,7 @@ $servicios = $stmt->fetchAll();
             </div>
         </div>
     </div>
-</div>
+</section>
 
 <!-- Contenedor oculto para armar el PDF -->
 <div id="pdfTemplate" class="d-none">
@@ -146,10 +148,19 @@ $servicios = $stmt->fetchAll();
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
-.custom-checkbox-card { cursor: pointer; transition: all 0.3s; }
-.custom-checkbox-card:hover { border-color: #0d6efd !important; background-color: #f8f9fa; transform: translateY(-2px); }
-.custom-checkbox-card input:checked ~ label h6 { color: #0d6efd; }
-.custom-checkbox-card input:checked { background-color: #0d6efd; border-color: #0d6efd; }
+.custom-checkbox-card { 
+    background: var(--dark-3); 
+    border: 1px solid var(--glass-border); 
+    cursor: pointer; 
+    transition: var(--transition); 
+}
+.custom-checkbox-card:hover { 
+    border-color: var(--primary) !important; 
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 15px rgba(108, 99, 255, 0.2);
+}
+.custom-checkbox-card input:checked ~ label h6 { color: var(--primary-light) !important; }
+.custom-checkbox-card input:checked { background-color: var(--primary); border-color: var(--primary); }
 </style>
 
 <script>
@@ -250,12 +261,12 @@ document.getElementById('cotizadorForm').addEventListener('submit', async functi
         
         if (result.success) {
             element.innerHTML = `
-                <div class="text-center py-5">
-                    <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
-                    <h2 class="mt-4">¡Propuesta Generada!</h2>
-                    <p class="lead">El documento PDF se ha descargado en tu dispositivo.</p>
-                    <p>Un consultor de Devioz se pondrá en contacto contigo pronto.</p>
-                    <a href="/Proyecto_Servicios/" class="btn btn-primary mt-3">Volver al Inicio</a>
+                <div class="text-center py-5 fade-in-up">
+                    <i class="bi bi-check-circle-fill" style="font-size: 4rem; color: var(--success);"></i>
+                    <h2 class="mt-4 text-primary-custom fw-bold">¡Propuesta Generada!</h2>
+                    <p class="lead text-secondary-custom">El documento PDF se ha descargado en tu dispositivo.</p>
+                    <p class="text-muted-custom">Un consultor de Devioz se pondrá en contacto contigo pronto.</p>
+                    <a href="/Proyecto_Servicios/" class="btn-accent px-4 py-2 mt-3 d-inline-block text-decoration-none">Volver al Inicio</a>
                 </div>
             `;
             document.getElementById('step3').innerHTML = element.innerHTML;
