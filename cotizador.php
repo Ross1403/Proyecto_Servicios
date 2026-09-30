@@ -119,28 +119,155 @@ $servicios = $stmt->fetchAll();
 
 <!-- Contenedor oculto para armar el PDF -->
 <div id="pdfTemplate" class="d-none">
-    <div style="padding: 40px; font-family: 'Helvetica', 'Arial', sans-serif; color: #333;">
-        <div style="border-bottom: 2px solid #0d6efd; padding-bottom: 20px; margin-bottom: 30px;">
-            <h1 style="color: #0d6efd; margin:0;">Devioz Proyectos</h1>
-            <p style="margin:5px 0 0 0; color: #666;">Propuesta Técnica Preliminar</p>
-        </div>
+    <div style="font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1a1a2e; width: 800px; height: 1123px; margin: 0; background: #fff; position: relative; overflow: hidden; box-sizing: border-box;">
         
-        <h3 style="margin-bottom: 10px;">Datos del Cliente</h3>
-        <p><strong>Empresa:</strong> <span id="pdfEmpresa"></span><br>
-        <strong>Contacto:</strong> <span id="pdfNombre"></span><br>
-        <strong>Fecha:</strong> <?= date('d/m/Y') ?></p>
-
-        <h3 style="margin-top: 30px; margin-bottom: 10px;">Servicios Solicitados</h3>
-        <ul id="pdfServicios" style="line-height: 1.8;"></ul>
-
-        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 40px; text-align: center;">
-            <h4 style="margin: 0 0 10px 0; color: #555;">Inversión Estimada</h4>
-            <h2 style="margin: 0; color: #0d6efd; font-size: 32px;" id="pdfTotal"></h2>
+        <!-- Background watermark -->
+        <div style="position: absolute; top: 300px; left: 100px; opacity: 0.02; pointer-events: none;">
+            <svg width="600" height="600" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="#6C63FF" stroke-width="5"/>
+                <path d="M 30 50 L 50 30 L 70 50 L 50 70 Z" fill="#6C63FF"/>
+            </svg>
         </div>
-        
-        <p style="font-size: 11px; color: #999; margin-top: 50px; text-align: justify;">
-            <strong>Nota Legal:</strong> El presente documento ha sido generado automáticamente de forma preliminar y no representa un compromiso contractual por parte de Devioz S.A.C. (RUC: 20611991909). Nuestro equipo comercial se pondrá en contacto a la brevedad para afinar los detalles técnicos y emitir una propuesta final formal.
-        </p>
+
+        <!-- Header -->
+        <div style="padding: 50px 60px 40px; border-bottom: 2px solid #F0F0F5; display: flex; justify-content: space-between; align-items: flex-start;">
+            <!-- Top Left: LOGO -->
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="width: 55px; height: 55px; background: linear-gradient(135deg, #6C63FF, #5A52D5); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 15px rgba(108, 99, 255, 0.2);">
+                    <!-- SVG Logo Icon -->
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 style="margin: 0; font-size: 26px; font-weight: 900; color: #0D0D1A; letter-spacing: -0.5px;">Devioz <span style="color: #6C63FF;">Proyectos</span></h1>
+                    <p style="margin: 2px 0 0; color: #6B6B85; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Agencia de Software</p>
+                </div>
+            </div>
+            
+            <!-- Top Right: Document Info -->
+            <div style="text-align: right;">
+                <h2 style="margin: 0 0 5px 0; font-size: 28px; color: #1A1A2E; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Propuesta</h2>
+                <div style="display: inline-block; background: #F4F4F9; padding: 6px 12px; border-radius: 6px; border: 1px solid #E5E5E5;">
+                    <span style="font-size: 11px; color: #6B6B85; text-transform: uppercase; font-weight: 700; margin-right: 10px;">Ref:</span>
+                    <span style="font-size: 13px; color: #6C63FF; font-weight: 800;" id="pdfRef"><?= date('Y-m-d-Hi') ?></span>
+                </div>
+            </div>
+        </div>
+
+        <div style="padding: 40px 60px;">
+            <!-- Client & Meta Info -->
+            <div style="display: flex; justify-content: space-between; margin-bottom: 50px;">
+                <!-- Client Info -->
+                <div style="width: 55%;">
+                    <h4 style="margin: 0 0 12px; font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; border-bottom: 2px solid #6C63FF; padding-bottom: 6px; display: inline-block;">Preparado Para</h4>
+                    <h2 style="margin: 0 0 5px; font-size: 20px; color: #0D0D1A; font-weight: 800;" id="pdfEmpresa"></h2>
+                    <p style="margin: 0 0 3px; font-size: 13px; color: #333; font-weight: 600;">Atn: <span id="pdfNombre"></span></p>
+                    <p style="margin: 0; font-size: 13px; color: #666;" id="pdfCorreoSpan"></p>
+                </div>
+                
+                <!-- Meta Data -->
+                <div style="width: 40%;">
+                    <h4 style="margin: 0 0 12px; font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; border-bottom: 2px solid #E5E5E5; padding-bottom: 6px; display: inline-block;">Detalles del Documento</h4>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 4px 0; font-size: 12px; color: #6B6B85; font-weight: 600;">Fecha Emisión:</td>
+                            <td style="padding: 4px 0; font-size: 12px; color: #1A1A2E; text-align: right; font-weight: 700;"><?= date('d M Y') ?></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 4px 0; font-size: 12px; color: #6B6B85; font-weight: 600;">Validez Oferta:</td>
+                            <td style="padding: 4px 0; font-size: 12px; color: #1A1A2E; text-align: right; font-weight: 700;">15 Días</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 4px 0; font-size: 12px; color: #6B6B85; font-weight: 600;">Elaborado por:</td>
+                            <td style="padding: 4px 0; font-size: 12px; color: #1A1A2E; text-align: right; font-weight: 700;">Dpto. Comercial</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Services Table -->
+            <div style="margin-bottom: 40px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th style="background: #1A1A2E; color: #fff; padding: 12px 20px; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; border-radius: 6px 0 0 6px; width: 5%;">N°</th>
+                            <th style="background: #1A1A2E; color: #fff; padding: 12px 20px; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Descripción del Servicio o Solución Tecnológica</th>
+                            <th style="background: #1A1A2E; color: #fff; padding: 12px 20px; text-align: center; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; border-radius: 0 6px 6px 0; width: 15%;">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pdfServicios">
+                        <!-- Populated via JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Total Block -->
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 60px;">
+                <div style="width: 50%; background: #FAFAFC; border: 1px solid #E5E5E5; border-radius: 8px; overflow: hidden;">
+                    <div style="padding: 20px; border-bottom: 1px solid #E5E5E5;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr>
+                                <td style="font-size: 13px; color: #6B6B85; font-weight: 600;">Subtotal Base</td>
+                                <td style="font-size: 13px; color: #1A1A2E; text-align: right; font-weight: 700;">Según Tarifa</td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 13px; color: #6B6B85; font-weight: 600; padding-top: 8px;">Ajuste por Complejidad</td>
+                                <td style="font-size: 13px; color: #1A1A2E; text-align: right; font-weight: 700; padding-top: 8px;">Incluido</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div style="padding: 20px; background: rgba(108, 99, 255, 0.05); display: flex; justify-content: space-between; align-items: center;">
+                        <div style="font-size: 14px; color: #6C63FF; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Inversión Estimada</div>
+                        <div style="font-size: 28px; color: #6C63FF; font-weight: 900; letter-spacing: -1px;" id="pdfTotal"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Signatures Section -->
+            <div style="display: flex; justify-content: space-between; margin-bottom: 40px; padding: 0 20px;">
+                <div style="width: 40%; text-align: center;">
+                    <div style="border-bottom: 1px solid #333; height: 60px; margin-bottom: 10px; position: relative;">
+                        <!-- Firma falsa o vacia -->
+                        <div style="position: absolute; bottom: 5px; left: 0; right: 0; text-align: center; font-family: 'Brush Script MT', cursive; font-size: 24px; color: #000; opacity: 0.7;">
+                            Aprobado
+                        </div>
+                    </div>
+                    <p style="margin: 0; font-size: 12px; font-weight: 700; color: #1A1A2E;">Dpto. Comercial</p>
+                    <p style="margin: 2px 0 0; font-size: 11px; color: #6B6B85;">Devioz Proyectos</p>
+                </div>
+                <div style="width: 40%; text-align: center;">
+                    <div style="border-bottom: 1px solid #333; height: 60px; margin-bottom: 10px;"></div>
+                    <p style="margin: 0; font-size: 12px; font-weight: 700; color: #1A1A2E;">Firma del Cliente</p>
+                    <p style="margin: 2px 0 0; font-size: 11px; color: #6B6B85;">Aceptación de la Propuesta</p>
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div style="background: #F8F9FA; padding: 20px; border-left: 3px solid #FFB020; border-radius: 4px;">
+                <h4 style="margin: 0 0 8px; font-size: 11px; color: #1A1A2E; text-transform: uppercase; font-weight: 800;"><i class="bi bi-info-circle"></i> Condiciones Comerciales Previas</h4>
+                <p style="margin: 0; font-size: 10px; color: #666; line-height: 1.6; text-align: justify;">
+                    El monto presentado es una <strong>estimación referencial</strong> basada en tarifas estándar. No constituye un contrato vinculante. Los costos finales se definirán en un anexo técnico detallado tras la reunión de levantamiento de requerimientos. Los precios expresados están en dólares americanos (USD) y no incluyen impuestos de ley vigentes a menos que se indique explícitamente.
+                </p>
+            </div>
+        </div>
+
+        <!-- Absolute Footer -->
+        <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 60px; background: #0D0D1A; border-top: 4px solid #6C63FF; display: flex; justify-content: space-between; align-items: center; color: #A0A0B8; font-size: 11px; font-weight: 500;">
+            <div>
+                <span style="color: #fff;">Web:</span> www.devioz.com
+            </div>
+            <div>
+                <span style="color: #fff;">Email:</span> contacto@devioz.com
+            </div>
+            <div>
+                <span style="color: #fff;">RUC:</span> 20611991909
+            </div>
+            <div style="text-align: right;">
+                Página 1 de 1
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -217,11 +344,19 @@ document.getElementById('cotizadorForm').addEventListener('submit', async functi
     document.getElementById('pdfNombre').innerText = this.nombre.value;
     document.getElementById('pdfTotal').innerText = `$${totalCalculado.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} USD`;
     
+    document.getElementById('pdfCorreoSpan').innerText = this.correo.value;
+    
     let listaServicios = document.getElementById('pdfServicios');
     listaServicios.innerHTML = '';
     let serviciosArray = [];
-    document.querySelectorAll('input[name="servicios[]"]:checked').forEach(el => {
-        listaServicios.innerHTML += `<li>${el.value}</li>`;
+    document.querySelectorAll('input[name="servicios[]"]:checked').forEach((el, index) => {
+        const bg = index % 2 === 0 ? '#FFFFFF' : '#FAFAFC';
+        listaServicios.innerHTML += `
+            <tr style="background: ${bg}; border-bottom: 1px solid #E5E5E5;">
+                <td style="padding: 12px 20px; font-size: 13px; color: #6B6B85; font-weight: 700; width: 5%;">${String(index + 1).padStart(2, '0')}</td>
+                <td style="padding: 12px 20px; font-size: 13px; color: #1A1A2E; font-weight: 600;">${el.value}</td>
+                <td style="padding: 12px 20px; font-size: 12px; color: #00D4AA; font-weight: 700; text-align: center; width: 15%;"><span style="background: rgba(0,212,170,0.1); padding: 4px 8px; border-radius: 4px;">INCLUIDO</span></td>
+            </tr>`;
         serviciosArray.push(el.value);
     });
 
@@ -230,11 +365,11 @@ document.getElementById('cotizadorForm').addEventListener('submit', async functi
     element.classList.remove('d-none'); // Mostrar temporalmente para el renderizado
     
     const opt = {
-      margin:       1,
+      margin:       0,
       filename:     `Propuesta_Devioz_${this.empresa.value.replace(/\s+/g, '_')}.pdf`,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2 },
-      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      image:        { type: 'jpeg', quality: 1 },
+      html2canvas:  { scale: 2, useCORS: true, logging: false },
+      jsPDF:        { unit: 'px', format: [800, 1123], orientation: 'portrait' }
     };
 
     try {
