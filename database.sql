@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS servicios (
     id_servicio INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     nombre      VARCHAR(120) NOT NULL,
     descripcion TEXT NOT NULL,
+    precio_base DECIMAL(10,2) DEFAULT 500.00,
     icono       VARCHAR(80) NOT NULL DEFAULT 'bi-gear',
     estado      TINYINT(1) NOT NULL DEFAULT 1,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -100,6 +101,22 @@ CREATE TABLE IF NOT EXISTS contactos (
     mensaje     TEXT NOT NULL,
     estado      ENUM('Nuevo','Revisado','Contactado','Cerrado') NOT NULL DEFAULT 'Nuevo',
     fecha       TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================
+-- TABLA: cotizaciones (Módulo de Cotización Dinámica)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS cotizaciones (
+    id_cotizacion        INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nombre               VARCHAR(100) NOT NULL,
+    correo               VARCHAR(150) NOT NULL,
+    telefono             VARCHAR(30),
+    empresa              VARCHAR(120),
+    servicios_json       TEXT,
+    presupuesto_estimado DECIMAL(10,2),
+    archivo_pdf          VARCHAR(255),
+    estado               ENUM('Pendiente', 'Revisada', 'Contactado', 'Descartada') DEFAULT 'Pendiente',
+    fecha                TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================

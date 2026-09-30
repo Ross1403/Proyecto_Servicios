@@ -58,6 +58,11 @@ function navLink(string $href, string $label, string $current): string {
                     <?= navLink($base . 'contacto.php', 'Contacto', $currentPage) ?>
                 </li>
                 <li class="nav-item ms-lg-2">
+                    <a href="<?= $base ?>cotizador.php" class="btn btn-warning btn-sm px-3 fw-bold text-dark">
+                        <i class="bi bi-calculator me-1"></i>Cotizador
+                    </a>
+                </li>
+                <li class="nav-item ms-lg-2">
                     <a href="<?= $base ?>admin/login.php" class="btn btn-accent btn-sm px-3">
                         <i class="bi bi-lock-fill me-1"></i>Admin
                     </a>

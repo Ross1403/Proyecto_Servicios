@@ -59,9 +59,10 @@ function sidebarItem(string $href, string $icon, string $label, string $active, 
             <?= sidebarItem('/Proyecto_Servicios/admin/servicios/listar.php', 'bi-gear', 'Servicios', $activePage, 'servicios') ?>
         </ul>
 
-        <p class="sidebar-label mt-3">Comunicaciones</p>
+        <p class="sidebar-label mt-3">Comunicaciones y Ventas</p>
         <ul class="nav flex-column">
             <?= sidebarItem('/Proyecto_Servicios/admin/contactos/listar.php', 'bi-envelope', 'Contactos', $activePage, 'contactos') ?>
+            <?= sidebarItem('/Proyecto_Servicios/admin/cotizaciones/listar.php', 'bi-file-earmark-pdf', 'Cotizaciones', $activePage, 'cotizaciones') ?>
         </ul>
 
         <p class="sidebar-label mt-3">Configuración</p>
