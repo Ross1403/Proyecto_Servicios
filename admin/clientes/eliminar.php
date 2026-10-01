@@ -12,19 +12,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $id) {
     try {
         $db = getDB();
         
-        // Obtener logo para eliminar archivo
+        // Obtener logo (solo para log o referencia, no eliminamos físicamente en Soft Delete)
         $stmtImg = $db->prepare("SELECT logo FROM clientes WHERE id_cliente = :id");
         $stmtImg->execute([':id' => $id]);
         $cliente = $stmtImg->fetch();
         
-        // Eliminar registro
-        $stmt = $db->prepare("DELETE FROM clientes WHERE id_cliente = :id");
+        // Eliminar registro de forma lógica (Soft Delete - Senior Pro)
+        $stmt = $db->prepare("UPDATE clientes SET deleted_at = NOW() WHERE id_cliente = :id");
         $stmt->execute([':id' => $id]);
         
-        if ($cliente && $cliente['logo']) {
-            $imgPath = __DIR__ . '/../../uploads/clientes/' . $cliente['logo'];
-            if (file_exists($imgPath)) unlink($imgPath);
-        }
+        // Ya no hacemos unlink() del logo físico, porque el registro podría restaurarse
+        // if ($cliente && $cliente['logo']) { ... }
         
         $_SESSION['flash'] = ['tipo' => 'success', 'msg' => 'Cliente eliminado correctamente.'];
     } catch (PDOException $e) {

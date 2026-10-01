@@ -13,7 +13,7 @@ $db = getDB();
 $q      = trim($_GET['q']      ?? '');
 $sector = trim($_GET['sector'] ?? '');
 
-$sql    = "SELECT c.*, (SELECT COUNT(*) FROM proyectos p WHERE p.id_cliente = c.id_cliente) AS total_proyectos FROM clientes c WHERE 1=1";
+$sql    = "SELECT c.*, (SELECT COUNT(*) FROM proyectos p WHERE p.id_cliente = c.id_cliente) AS total_proyectos FROM clientes c WHERE deleted_at IS NULL";
 $params = [];
 
 if ($q !== '') {
@@ -47,6 +47,7 @@ unset($_SESSION['flash']);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
     <link rel="stylesheet" href="/Proyecto_Servicios/assets/css/admin.css">
     <style>
         /* Estilizar los controles inyectados por DataTables para que respeten el diseño oscuro */
@@ -84,6 +85,26 @@ unset($_SESSION['flash']);
         /* Ajustar espaciado del wrapper para que no choque con los bordes */
         .dataTables_wrapper {
             padding: 1rem;
+        }
+        
+        /* Estilos de botones de exportación DataTables para que calcen con el tema oscuro */
+        div.dt-buttons {
+            margin-bottom: 1rem;
+        }
+        div.dt-buttons .btn {
+            background-color: var(--admin-bg);
+            color: var(--text-secondary);
+            border: 1px solid var(--admin-border);
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            padding: 0.35rem 0.75rem;
+            margin-right: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        div.dt-buttons .btn:hover {
+            background-color: var(--primary-light, #6C63FF);
+            color: white;
+            border-color: var(--primary-light, #6C63FF);
         }
         
         /* Estilizar la paginación (Anterior, 1, Siguiente) */
@@ -283,17 +304,70 @@ unset($_SESSION['flash']);
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<!-- Scripts para Exportación de DataTables -->
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 <script src="/Proyecto_Servicios/assets/js/admin.js"></script>
 <script>
 $(document).ready(function() {
     $('#clientesTable').DataTable({
         "language": {
-            "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
+            "sProcessing":     "Procesando...",
+            "sLengthMenu":     "Mostrar _MENU_ registros",
+            "sZeroRecords":    "No se encontraron resultados",
+            "sEmptyTable":     "Ningún dato disponible en esta tabla",
+            "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix":    "",
+            "sSearch":         "Buscar:",
+            "sUrl":            "",
+            "sInfoThousands":  ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst":    "Primero",
+                "sLast":     "Último",
+                "sNext":     "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
         },
         "pageLength": 10,
         "ordering": true,
         "info": true,
-        "responsive": true
+        "responsive": true,
+        // DOM Senior Pro: (l)ength + (B)uttons a la izquierda, (f)ilter a la derecha
+        "dom": '<"row mb-3"<"col-sm-12 col-md-8 d-flex align-items-center flex-wrap gap-2"l B><"col-sm-12 col-md-4 d-flex justify-content-end"f>>rt<"row mt-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+        "buttons": [
+            {
+                extend: 'excelHtml5',
+                text: '<i class="bi bi-file-earmark-excel"></i> Excel',
+                className: 'btn btn-sm btn-outline-light',
+                exportOptions: { columns: [0, 1, 2, 3, 4, 6] }
+            },
+            {
+                extend: 'pdfHtml5',
+                text: '<i class="bi bi-file-earmark-pdf"></i> PDF',
+                className: 'btn btn-sm btn-outline-light',
+                exportOptions: { columns: [0, 1, 2, 3, 4, 6] }
+            },
+            {
+                extend: 'print',
+                text: '<i class="bi bi-printer"></i> Imprimir',
+                className: 'btn btn-sm btn-outline-light',
+                exportOptions: { columns: [0, 1, 2, 3, 4, 6] }
+            }
+        ],
+        "lengthChange": true, // Restaurado: Muestra el texto "Mostrar 10 registros"
+        "searching": true     // Restaurado: Muestra el buscador nativo
     });
 });
 </script>

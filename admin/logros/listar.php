@@ -49,7 +49,7 @@ unset($_SESSION['flash']);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/Proyecto_Servicios/assets/css/admin.css">
+        <link rel="stylesheet" href="/Proyecto_Servicios/assets/css/admin.css">
 </head>
 <body>
 <div class="admin-layout">
@@ -193,6 +193,8 @@ unset($_SESSION['flash']);
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery ya debería estar en los archivos o lo aseguramos -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="/Proyecto_Servicios/assets/js/admin.js"></script>
 </body>
 </html>

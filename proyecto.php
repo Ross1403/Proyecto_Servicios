@@ -156,6 +156,7 @@ include 'includes/navbar.php';
         <div class="mt-4">
             <img src="uploads/proyectos/<?= htmlspecialchars($proyecto['imagen']) ?>"
                  alt="Imagen <?= htmlspecialchars($proyecto['nombre']) ?>"
+                 loading="lazy"
                  style="width:100%;max-height:400px;object-fit:cover;border-radius:var(--radius-lg);border:1px solid var(--glass-border)">
         </div>
         <?php endif; ?>

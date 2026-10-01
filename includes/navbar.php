@@ -62,6 +62,12 @@ function navLink(string $href, string $label, string $current): string {
                         <i class="bi bi-calculator me-1"></i>Cotizador
                     </a>
                 </li>
+                <!-- Dark Mode Toggle -->
+                <li class="nav-item ms-lg-2 d-flex align-items-center">
+                    <button id="themeToggle" class="btn btn-sm btn-outline-light border-0" aria-label="Cambiar tema">
+                        <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                    </button>
+                </li>
                 <li class="nav-item ms-lg-2">
                     <a href="<?= $base ?>admin/login.php" class="btn btn-accent btn-sm px-3">
                         <i class="bi bi-lock-fill me-1"></i>Admin

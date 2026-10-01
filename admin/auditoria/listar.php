@@ -40,7 +40,83 @@ $modulosUnicos = $db->query("SELECT DISTINCT modulo FROM audit_logs ORDER BY mod
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
     <link rel="stylesheet" href="/Proyecto_Servicios/assets/css/admin.css">
+    <style>
+        /* Estilizar los controles inyectados por DataTables para que respeten el diseño oscuro */
+        div.dataTables_wrapper div.dataTables_length label,
+        div.dataTables_wrapper div.dataTables_filter label,
+        div.dataTables_wrapper div.dataTables_info,
+        div.dataTables_wrapper div.dataTables_paginate {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+        div.dataTables_wrapper div.dataTables_length select {
+            background-color: var(--admin-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--admin-border);
+            border-radius: var(--radius-sm);
+            padding: 0.35rem 1rem;
+            min-width: 75px;
+            margin: 0 0.5rem;
+        }
+        div.dataTables_wrapper div.dataTables_filter input {
+            background-color: var(--admin-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--admin-border);
+            border-radius: var(--radius-sm);
+            padding: 0.35rem 0.75rem;
+            margin-left: 0.5rem;
+        }
+        div.dataTables_wrapper div.dataTables_filter input:focus,
+        div.dataTables_wrapper div.dataTables_length select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
+        }
+        .dataTables_wrapper { padding: 1rem; }
+        
+        div.dt-buttons { margin-bottom: 1rem; }
+        div.dt-buttons .btn {
+            background-color: var(--admin-bg);
+            color: var(--text-secondary);
+            border: 1px solid var(--admin-border);
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            padding: 0.35rem 0.75rem;
+            margin-right: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        div.dt-buttons .btn:hover {
+            background-color: var(--primary-light, #6C63FF);
+            color: white;
+            border-color: var(--primary-light, #6C63FF);
+        }
+        
+        div.dataTables_wrapper div.dataTables_paginate ul.pagination .page-item .page-link {
+            background-color: var(--admin-bg);
+            color: var(--text-secondary);
+            border: 1px solid var(--admin-border);
+            margin: 0 2px;
+            border-radius: var(--radius-sm);
+        }
+        div.dataTables_wrapper div.dataTables_paginate ul.pagination .page-item.active .page-link {
+            background-color: var(--primary-light, #6C63FF);
+            color: #fff;
+            border-color: var(--primary-light, #6C63FF);
+        }
+        div.dataTables_wrapper div.dataTables_paginate ul.pagination .page-item.disabled .page-link {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            border-color: var(--admin-border);
+        }
+        div.dataTables_wrapper div.dataTables_paginate ul.pagination .page-item:not(.active):not(.disabled) .page-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+    </style>
 </head>
 <body>
 <div class="admin-layout">
@@ -97,7 +173,7 @@ $modulosUnicos = $db->query("SELECT DISTINCT modulo FROM audit_logs ORDER BY mod
                 <p>No hay eventos de auditoría para mostrar.</p>
             </div>
             <?php else: ?>
-            <table class="table-admin">
+            <table class="table-admin" id="auditoriaTable">
                 <thead>
                     <tr>
                         <th>Fecha y Hora</th>
@@ -139,6 +215,59 @@ $modulosUnicos = $db->query("SELECT DISTINCT modulo FROM audit_logs ORDER BY mod
 </main>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery ya debería estar en los archivos o lo aseguramos -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 <script src="/Proyecto_Servicios/assets/js/admin.js"></script>
+<script>
+$(document).ready(function() {
+    $('#auditoriaTable').DataTable({
+        "language": {
+            "sProcessing":     "Procesando...",
+            "sLengthMenu":     "Mostrar _MENU_ registros",
+            "sZeroRecords":    "No se encontraron resultados",
+            "sEmptyTable":     "Ningún dato disponible en esta tabla",
+            "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix":    "",
+            "sSearch":         "Buscar:",
+            "sUrl":            "",
+            "sInfoThousands":  ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst":    "Primero",
+                "sLast":     "Último",
+                "sNext":     "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        },
+        "pageLength": 10,
+        "ordering": true,
+        "info": true,
+        "responsive": true,
+        "dom": '<"row mb-3"<"col-sm-12 col-md-8 d-flex align-items-center flex-wrap gap-2"l B><"col-sm-12 col-md-4 d-flex justify-content-end"f>>rt<"row mt-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+        "buttons": [
+            { extend: 'excelHtml5', text: '<i class="bi bi-file-earmark-excel"></i> Excel', className: 'btn btn-sm btn-outline-light' },
+            { extend: 'pdfHtml5', text: '<i class="bi bi-file-earmark-pdf"></i> PDF', className: 'btn btn-sm btn-outline-light' },
+            { extend: 'print', text: '<i class="bi bi-printer"></i> Imprimir', className: 'btn btn-sm btn-outline-light' }
+        ],
+        "lengthChange": true,
+        "searching": true
+    });
+});
+</script>
 </body>
 </html>

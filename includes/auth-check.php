@@ -15,6 +15,28 @@ if (empty($_SESSION['admin_id']) || empty($_SESSION['admin_rol'])) {
     exit;
 }
 
+// ============================================================
+// RBAC (Role-Based Access Control) Senior Pro
+// ============================================================
+function require_role($allowed_roles) {
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    $user_role = $_SESSION['admin_rol'] ?? '';
+    
+    if (!is_array($allowed_roles)) {
+        $allowed_roles = [$allowed_roles];
+    }
+    
+    // Si es SuperAdmin, siempre tiene acceso
+    if ($user_role === 'SuperAdmin') return true;
+    
+    if (!in_array($user_role, $allowed_roles)) {
+        // Redirigir con error si no tiene permisos
+        $_SESSION['flash'] = ['tipo' => 'danger', 'msg' => 'No tienes permisos para acceder a esta sección.'];
+        header('Location: /Proyecto_Servicios/admin/dashboard.php');
+        exit;
+    }
+}
+
 // Regenerar ID de sesión periódicamente para prevenir session fixation
 if (empty($_SESSION['last_regen']) || (time() - $_SESSION['last_regen']) > 300) {
     session_regenerate_id(true);
