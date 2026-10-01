@@ -31,30 +31,48 @@
 })();
 
 // ============================================================
-// DELETE CONFIRM — Modal de confirmación antes de eliminar
+// DELETE CONFIRM — Modal de confirmación con SweetAlert2 (UX Pro)
 // Busca botones con data-delete-url y data-delete-name
 // ============================================================
 (function () {
-    const modal    = document.getElementById('deleteModal');
-    if (!modal) return;
-
-    const modalBS  = new bootstrap.Modal(modal);
-    const nameEl   = document.getElementById('deleteItemName');
-    const confirmBtn = document.getElementById('confirmDeleteBtn');
-
-    let deleteUrl = '';
+    // Si no está cargado SweetAlert, lo cargamos dinámicamente
+    if (typeof Swal === 'undefined') {
+        const script = document.createElement('script');
+        script.src = "https://cdn.jsdelivr.net/npm/sweetalert2@11";
+        document.head.appendChild(script);
+    }
 
     document.querySelectorAll('[data-delete-url]').forEach(btn => {
-        btn.addEventListener('click', () => {
-            deleteUrl = btn.getAttribute('data-delete-url');
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const deleteUrl = btn.getAttribute('data-delete-url');
             const name = btn.getAttribute('data-delete-name') || 'este elemento';
-            if (nameEl) nameEl.textContent = name;
-            modalBS.show();
+            
+            // Usando SweetAlert2 en lugar del modal por defecto
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    html: `Vas a eliminar a <strong>${name}</strong>.<br><small style="color:red">Esta acción no se puede deshacer.</small>`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#FF4D6A',
+                    cancelButtonColor: '#3d4452',
+                    confirmButtonText: '<i class="bi bi-trash3"></i> Sí, eliminar',
+                    cancelButtonText: 'Cancelar',
+                    background: '#1c2128',
+                    color: '#fff'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = deleteUrl;
+                    }
+                });
+            } else {
+                // Fallback si Swal no carga rápido
+                if (confirm(`¿Eliminar ${name}?`)) {
+                    window.location.href = deleteUrl;
+                }
+            }
         });
-    });
-
-    confirmBtn?.addEventListener('click', () => {
-        if (deleteUrl) window.location.href = deleteUrl;
     });
 })();
 

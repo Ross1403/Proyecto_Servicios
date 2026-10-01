@@ -5,6 +5,7 @@
 // ============================================================
 if (!isset($pageTitle)) $pageTitle = 'Devioz Proyectos';
 if (!isset($pageDesc))  $pageDesc  = 'Transformamos necesidades empresariales en soluciones tecnológicas.';
+if (!isset($pageImage)) $pageImage = '';
 
 // Calcular base path dinámicamente
 $depth = substr_count(str_replace('\\', '/', $_SERVER['SCRIPT_NAME']), '/') - 1;
@@ -21,6 +22,9 @@ if ($depth <= 1) $base = '';
     <meta name="robots" content="index, follow">
     <meta property="og:title" content="<?= htmlspecialchars($pageTitle) ?> | Devioz Proyectos">
     <meta property="og:description" content="<?= htmlspecialchars($pageDesc) ?>">
+    <?php if ($pageImage): ?>
+    <meta property="og:image" content="<?= htmlspecialchars($pageImage) ?>">
+    <?php endif; ?>
     <meta property="og:type" content="website">
     <title><?= htmlspecialchars($pageTitle) ?> | Devioz Proyectos</title>
 

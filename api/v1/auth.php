@@ -14,6 +14,24 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+// ============================================================
+// RATE LIMITING - Prevención de fuerza bruta (Security Pro)
+// ============================================================
+session_start();
+$ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+$rateLimitKey = 'login_attempts_' . md5($ip);
+
+if (!isset($_SESSION[$rateLimitKey])) {
+    $_SESSION[$rateLimitKey] = ['count' => 0, 'locked_until' => 0];
+}
+
+if (time() < $_SESSION[$rateLimitKey]['locked_until']) {
+    http_response_code(429); // Too Many Requests
+    $remaining = ceil(($_SESSION[$rateLimitKey]['locked_until'] - time()) / 60);
+    echo json_encode(['error' => "Demasiados intentos fallidos. Intente nuevamente en $remaining minuto(s)."]);
+    exit;
+}
+
 $input = json_decode(file_get_contents('php://input'), true);
 $email = $input['email'] ?? '';
 $password = $input['password'] ?? '';
@@ -31,6 +49,9 @@ try {
     $user = $stmt->fetch();
 
     if ($user && password_verify($password, $user['password'])) {
+        // Resetear rate limiting al tener éxito
+        $_SESSION[$rateLimitKey] = ['count' => 0, 'locked_until' => 0];
+
         // Generar JWT
         $payload = [
             'id_usuario' => $user['id_usuario'],
@@ -50,8 +71,20 @@ try {
             ]
         ]);
     } else {
+        // Aumentar contador de fallos
+        $_SESSION[$rateLimitKey]['count']++;
+        
+        // Si falla 5 veces, bloquear por 15 minutos
+        if ($_SESSION[$rateLimitKey]['count'] >= 5) {
+            $_SESSION[$rateLimitKey]['locked_until'] = time() + (15 * 60);
+        }
+
         http_response_code(401);
-        echo json_encode(['error' => 'Credenciales inválidas']);
+        $intentos_restantes = 5 - $_SESSION[$rateLimitKey]['count'];
+        echo json_encode([
+            'error' => 'Credenciales inválidas.', 
+            'intentos_restantes' => max(0, $intentos_restantes)
+        ]);
     }
 } catch (PDOException $e) {
     http_response_code(500);

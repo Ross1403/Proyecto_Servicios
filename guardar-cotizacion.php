@@ -2,6 +2,7 @@
 // guardar-cotizacion.php
 header('Content-Type: application/json');
 require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/includes/Webhook.php'; // Webhook Senior Pro
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Obtener los datos del JSON
@@ -45,6 +46,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $notif->execute([
             ':msg' => "Nueva cotización de {$empresa} por $" . number_format($total, 2),
             ':url' => "/Proyecto_Servicios/admin/cotizaciones/detalles.php?id=" . $id_nueva_cotizacion
+        ]);
+
+        // ----------------------------------------------------
+        // EJECUTAR WEBHOOK (Senior Pro)
+        // ----------------------------------------------------
+        Webhook::notifySalesTeam('Nueva Solicitud de Cotización', [
+            'Cliente' => $nombre,
+            'Empresa' => $empresa ?: 'No especificada',
+            'Correo' => $correo,
+            'Teléfono' => $telefono ?: 'No especificado',
+            'Presupuesto Calculado' => 'S/ ' . number_format($total, 2)
         ]);
 
         echo json_encode(['success' => true]);

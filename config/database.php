@@ -3,6 +3,9 @@
 // config/database.php — Conexión PDO para Devioz Proyectos
 // ============================================================
 
+// Inicializar el manejador de errores avanzado (Senior Pro)
+require_once __DIR__ . '/../includes/ErrorHandler.php';
+
 define('DB_HOST', 'localhost');
 define('DB_PORT', '3306');
 define('DB_NAME', 'devioz_proyectos');

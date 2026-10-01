@@ -44,6 +44,12 @@ $relacionados = $stmtRel->fetchAll();
 $pageTitle = htmlspecialchars($proyecto['nombre']);
 $pageDesc  = 'Proyecto ' . $proyecto['nombre'] . ' de ' . $proyecto['cliente_nombre'] . ' — Devioz Proyectos.';
 
+// Inyección SEO Dinámica (Open Graph Image)
+if (!empty($proyecto['imagen'])) {
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+    $pageImage = $protocol . $_SERVER['HTTP_HOST'] . '/Proyecto_Servicios/uploads/proyectos/' . $proyecto['imagen'];
+}
+
 $estadoClass = match($proyecto['estado']) {
     'Finalizado'    => 'badge-finalizado',
     'En desarrollo' => 'badge-en-desarrollo',

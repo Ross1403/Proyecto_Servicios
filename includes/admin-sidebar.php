@@ -88,6 +88,7 @@ function sidebarItem(string $href, string $icon, string $label, string $active, 
         <p class="sidebar-label mt-3">Configuración</p>
         <ul class="nav flex-column">
             <?= sidebarItem('/Proyecto_Servicios/admin/usuarios/listar.php', 'bi-people', 'Usuarios', $activePage, 'usuarios') ?>
+            <?= sidebarItem('/Proyecto_Servicios/admin/auditoria/listar.php', 'bi-shield-check', 'Auditoría', $activePage, 'auditoria') ?>
         </ul>
     </nav>
 

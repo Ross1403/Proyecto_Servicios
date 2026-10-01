@@ -132,6 +132,20 @@ CREATE TABLE IF NOT EXISTS notificaciones (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
+-- TABLA: audit_logs (Módulo de Auditoría)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS audit_logs (
+    id_log          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id_usuario      INT,
+    accion          VARCHAR(100) NOT NULL,
+    modulo          VARCHAR(100) NOT NULL,
+    detalles        TEXT,
+    ip              VARCHAR(45),
+    fecha           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================
 -- SEED DATA — USUARIOS
 -- Password: Admin2024! (hasheado con PASSWORD_BCRYPT)
 -- ============================================================

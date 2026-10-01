@@ -40,6 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['admin_rol']    = $usuario['rol'];
             $_SESSION['last_regen']   = time();
 
+            require_once __DIR__ . '/../includes/logger.php';
+            Logger::log('Inicio de sesión exitoso', 'Autenticación', "IP registrada");
+
             // Redirigir a URL solicitada o dashboard
             $redirect = $_SESSION['redirect_after_login'] ?? '/Proyecto_Servicios/admin/dashboard.php';
             unset($_SESSION['redirect_after_login']);

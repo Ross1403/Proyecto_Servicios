@@ -3,6 +3,11 @@
 // admin/logout.php — Cierra sesión y redirige al login
 // ============================================================
 session_start();
+if (!empty($_SESSION['admin_id'])) {
+    require_once __DIR__ . '/../config/database.php';
+    require_once __DIR__ . '/../includes/logger.php';
+    Logger::log('Cierre de sesión', 'Autenticación');
+}
 session_unset();
 session_destroy();
 

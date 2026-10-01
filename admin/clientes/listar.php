@@ -46,7 +46,69 @@ unset($_SESSION['flash']);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="/Proyecto_Servicios/assets/css/admin.css">
+    <style>
+        /* Estilizar los controles inyectados por DataTables para que respeten el diseño oscuro */
+        div.dataTables_wrapper div.dataTables_length label,
+        div.dataTables_wrapper div.dataTables_filter label,
+        div.dataTables_wrapper div.dataTables_info,
+        div.dataTables_wrapper div.dataTables_paginate {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+        div.dataTables_wrapper div.dataTables_length select {
+            background-color: var(--admin-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--admin-border);
+            border-radius: var(--radius-sm);
+            padding: 0.35rem 1rem; /* Aumentado el padding para hacerlo más ancho */
+            min-width: 75px; /* Ancho mínimo garantizado */
+            margin: 0 0.5rem;
+        }
+        div.dataTables_wrapper div.dataTables_filter input {
+            background-color: var(--admin-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--admin-border);
+            border-radius: var(--radius-sm);
+            padding: 0.35rem 0.75rem;
+            margin-left: 0.5rem;
+        }
+        div.dataTables_wrapper div.dataTables_filter input:focus,
+        div.dataTables_wrapper div.dataTables_length select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
+        }
+        /* Ajustar espaciado del wrapper para que no choque con los bordes */
+        .dataTables_wrapper {
+            padding: 1rem;
+        }
+        
+        /* Estilizar la paginación (Anterior, 1, Siguiente) */
+        div.dataTables_wrapper div.dataTables_paginate ul.pagination .page-item .page-link {
+            background-color: var(--admin-bg);
+            color: var(--text-secondary);
+            border: 1px solid var(--admin-border);
+            margin: 0 2px;
+            border-radius: var(--radius-sm);
+        }
+        div.dataTables_wrapper div.dataTables_paginate ul.pagination .page-item.active .page-link {
+            background-color: var(--primary-light, #6C63FF);
+            color: #fff;
+            border-color: var(--primary-light, #6C63FF);
+        }
+        div.dataTables_wrapper div.dataTables_paginate ul.pagination .page-item.disabled .page-link {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            border-color: var(--admin-border);
+        }
+        div.dataTables_wrapper div.dataTables_paginate ul.pagination .page-item:not(.active):not(.disabled) .page-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+    </style>
 </head>
 <body>
 <div class="admin-layout">
@@ -112,7 +174,7 @@ unset($_SESSION['flash']);
             <?php if (empty($clientes)): ?>
             <div class="empty-state"><i class="bi bi-building-slash"></i><h5>Sin clientes</h5><p>No hay clientes que coincidan con la búsqueda.</p></div>
             <?php else: ?>
-            <table class="table-admin">
+            <table class="table-admin" id="clientesTable">
                 <thead>
                     <tr>
                         <th>Cliente</th>
@@ -217,7 +279,23 @@ unset($_SESSION['flash']);
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script src="/Proyecto_Servicios/assets/js/admin.js"></script>
+<script>
+$(document).ready(function() {
+    $('#clientesTable').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
+        },
+        "pageLength": 10,
+        "ordering": true,
+        "info": true,
+        "responsive": true
+    });
+});
+</script>
 </body>
 </html>

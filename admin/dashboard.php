@@ -34,6 +34,18 @@ $chartData = $db->query("
 $chartLabels = array_map(fn($r) => $r['cliente'], $chartData);
 $chartValues = array_map(fn($r) => (int)$r['total'], $chartData);
 
+// ---- Datos para gráfico: clientes por sector (Business Intelligence) ----
+$sectorData = $db->query("
+    SELECT sector, COUNT(id_cliente) AS total
+    FROM clientes
+    WHERE sector IS NOT NULL AND sector != ''
+    GROUP BY sector
+    ORDER BY total DESC
+")->fetchAll();
+
+$sectorLabels = array_map(fn($r) => $r['sector'], $sectorData);
+$sectorValues = array_map(fn($r) => (int)$r['total'], $sectorData);
+
 // ---- Últimos contactos ----
 $ultimosContactos = $db->query("
     SELECT * FROM contactos ORDER BY fecha DESC LIMIT 5
@@ -186,10 +198,10 @@ $proyectosRecientes = $db->query("
                 </div>
             </div>
 
-            <!-- Gráfico y últimos contactos -->
+            <!-- Gráficos Chart.js -->
             <div class="row g-4 mb-4">
-                <!-- Gráfico Chart.js -->
-                <div class="col-lg-7">
+                <!-- Gráfico de Barras -->
+                <div class="col-lg-6">
                     <div class="admin-card">
                         <div class="admin-card-header">
                             <h2 class="admin-card-title"><i class="bi bi-bar-chart-line me-2"></i>Proyectos por cliente</h2>
@@ -202,6 +214,23 @@ $proyectosRecientes = $db->query("
                     </div>
                 </div>
 
+                <!-- Gráfico Circular (Clientes por Sector) -->
+                <div class="col-lg-6">
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h2 class="admin-card-title"><i class="bi bi-pie-chart-fill me-2"></i>Clientes por Sector</h2>
+                        </div>
+                        <div class="admin-card-body">
+                            <div class="chart-container" style="height:260px; display: flex; justify-content: center;">
+                                <canvas id="chartSectores"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Últimos mensajes y Proyectos -->
+            <div class="row g-4 mb-4">
                 <!-- Últimos mensajes -->
                 <div class="col-lg-5">
                     <div class="admin-card">
@@ -243,11 +272,12 @@ $proyectosRecientes = $db->query("
             </div>
 
             <!-- Proyectos recientes -->
-            <div class="admin-card">
-                <div class="admin-card-header">
-                    <h2 class="admin-card-title"><i class="bi bi-kanban me-2"></i>Proyectos recientes</h2>
-                    <a href="/Proyecto_Servicios/admin/proyectos/listar.php" class="btn-admin-secondary btn-admin-sm">Ver todos</a>
-                </div>
+            <div class="col-lg-7">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h2 class="admin-card-title"><i class="bi bi-kanban me-2"></i>Proyectos recientes</h2>
+                        <a href="/Proyecto_Servicios/admin/proyectos/listar.php" class="btn-admin-secondary btn-admin-sm">Ver todos</a>
+                    </div>
                 <div style="overflow-x:auto">
                     <table class="table-admin">
                         <thead>
@@ -285,6 +315,7 @@ $proyectosRecientes = $db->query("
                     </table>
                 </div>
             </div>
+            </div> <!-- Cierre del row de mensajes y proyectos -->
 
             <!-- Accesos rápidos -->
             <div class="row g-3 mt-4">
@@ -360,6 +391,41 @@ new Chart(ctx, {
                 beginAtZero: true,
                 grid: { color: 'rgba(255,255,255,.05)' },
                 ticks: { color: '#6B6B85', font: { size: 11, family: 'Inter' }, stepSize: 1 }
+            }
+        }
+    }
+});
+
+// Chart.js — Clientes por Sector (Business Intelligence)
+const ctxPie = document.getElementById('chartSectores').getContext('2d');
+new Chart(ctxPie, {
+    type: 'doughnut',
+    data: {
+        labels: <?= json_encode($sectorLabels) ?>,
+        datasets: [{
+            data: <?= json_encode($sectorValues) ?>,
+            backgroundColor: [
+                '#6C63FF', '#FF6B6B', '#00D4AA', '#FFB020', '#38BDF8', '#9B51E0'
+            ],
+            borderWidth: 2,
+            borderColor: '#1c2128' // Color del fondo del admin para separar los trozos
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: {
+            legend: { 
+                position: 'right',
+                labels: { color: '#A0A0B8', font: { family: 'Inter', size: 11 }, padding: 15 }
+            },
+            tooltip: {
+                backgroundColor: '#1A1A2E',
+                borderColor: 'rgba(255,255,255,0.1)',
+                borderWidth: 1,
+                titleColor: '#fff',
+                bodyColor: '#A0A0B8'
             }
         }
     }
