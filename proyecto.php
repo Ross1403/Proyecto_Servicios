@@ -147,6 +147,30 @@ include 'includes/navbar.php';
                             <span style="font-size:.85rem;color:var(--text-muted)"><i class="bi bi-tag me-2"></i>Sector</span>
                             <span style="font-size:.85rem;font-weight:600"><?= htmlspecialchars($proyecto['sector']) ?></span>
                         </div>
+                        <?php if (isset($proyecto['porcentaje_avance'])): ?>
+                        <div class="pt-2" style="border-top:1px solid rgba(255,255,255,0.08)">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span style="font-size:.82rem;color:var(--text-muted)"><i class="bi bi-speedometer2 me-2"></i>Avance del proyecto</span>
+                                <span style="font-size:.82rem;font-weight:700;color:var(--primary-light)"><?= (int)$proyecto['porcentaje_avance'] ?>%</span>
+                            </div>
+                            <div class="progress" style="height:6px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden">
+                                <div class="progress-bar" role="progressbar" style="width: <?= (int)$proyecto['porcentaje_avance'] ?>%; background: <?= (int)$proyecto['porcentaje_avance'] == 100 ? 'var(--success)' : 'linear-gradient(90deg, var(--primary), #38bdf8)' ?>;" aria-valuenow="<?= (int)$proyecto['porcentaje_avance'] ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <?php if (!empty($proyecto['descripcion_avance'])): ?>
+                            <p class="mt-2 mb-0" style="font-size:.78rem;color:var(--text-muted);line-height:1.4">
+                                <i class="bi bi-chat-quote me-1"></i><?= htmlspecialchars($proyecto['descripcion_avance']) ?>
+                            </p>
+                            <?php endif; ?>
+                        </div>
+                        <?php endif; ?>
+
+                        <?php if (!empty($proyecto['archivo_zip']) && file_exists('uploads/proyectos/entregables/' . $proyecto['archivo_zip'])): ?>
+                        <div class="pt-2" style="border-top:1px solid rgba(255,255,255,0.08)">
+                            <a href="uploads/proyectos/entregables/<?= urlencode($proyecto['archivo_zip']) ?>" download="<?= htmlspecialchars($proyecto['archivo_zip_nombre'] ?: $proyecto['archivo_zip']) ?>" class="btn-primary-custom w-100 d-flex align-items-center justify-content-center gap-2" style="font-size:.82rem;padding:.5rem .8rem;text-decoration:none">
+                                <i class="bi bi-file-earmark-zip-fill text-warning"></i> Descargar Entregable (.ZIP)
+                            </a>
+                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

@@ -285,3 +285,76 @@ style.textContent = `
 @keyframes fadeOut { from { opacity:1; } to { opacity:0; transform:translateX(40px); } }
 `;
 document.head.appendChild(style);
+
+// ============================================================
+// ZIP UPLOAD & AVANCE CONTROLLER (SENIOR PRO — REPLICA EXACTA DE LA IMAGEN)
+// ============================================================
+(function () {
+    const zipInput      = document.getElementById('zipFileInput');
+    const zipVisualCard = document.getElementById('zipVisualCard');
+    const zipVisualName = document.getElementById('zipVisualName');
+    const zipVisualSize = document.getElementById('zipVisualSize');
+    const chkQuitar     = document.getElementById('chkQuitarZipSeleccionado');
+    const uploadPrompt  = document.getElementById('zipUploadPrompt');
+    const avanceRange   = document.getElementById('avanceRange');
+    const avanceDisplay = document.getElementById('avanceDisplay');
+
+    if (zipInput) {
+        zipInput.addEventListener('change', function () {
+            const file = this.files[0];
+            if (!file) {
+                if (zipVisualCard) zipVisualCard.style.display = 'none';
+                if (uploadPrompt) uploadPrompt.innerHTML = 'Subir archivo comprimido<br><small>ZIP, RAR, 7Z (Máx. 40MB)</small>';
+                return;
+            }
+
+            // Validar tamaño máximo (40MB de XAMPP)
+            const maxBytes = 40 * 1024 * 1024;
+            if (file.size > maxBytes) {
+                alert('El archivo comprimido supera el límite de 40MB permitido.');
+                this.value = '';
+                if (zipVisualCard) zipVisualCard.style.display = 'none';
+                return;
+            }
+
+            const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
+
+            // Mostrar la tarjeta EXACTA de la imagen del usuario
+            if (zipVisualName) zipVisualName.textContent = file.name;
+            if (zipVisualSize) zipVisualSize.textContent = `${sizeMb} MB`;
+            if (chkQuitar) chkQuitar.checked = false;
+            if (zipVisualCard) zipVisualCard.style.display = 'block';
+
+            // Cambiar el texto de la zona inferior a "Reemplazar archivo comprimido"
+            if (uploadPrompt) {
+                uploadPrompt.innerHTML = 'Reemplazar archivo comprimido<br><small>ZIP, RAR, 7Z (Máx. 40MB)</small>';
+            }
+        });
+    }
+
+    // Si marca "Eliminar este archivo comprimido"
+    if (chkQuitar && zipInput) {
+        chkQuitar.addEventListener('change', function () {
+            if (this.checked) {
+                zipInput.value = '';
+                if (zipVisualCard) zipVisualCard.style.display = 'none';
+                if (uploadPrompt) {
+                    uploadPrompt.innerHTML = 'Subir archivo comprimido<br><small>ZIP, RAR, 7Z (Máx. 40MB)</small>';
+                }
+            }
+        });
+    }
+
+    if (avanceRange && avanceDisplay) {
+        avanceRange.addEventListener('input', function () {
+            avanceDisplay.textContent = `${this.value}%`;
+            if (this.value == 100) {
+                avanceDisplay.className = 'badge-admin badge-fin';
+            } else if (this.value >= 50) {
+                avanceDisplay.className = 'badge-admin badge-dev';
+            } else {
+                avanceDisplay.className = 'badge-admin badge-plan';
+            }
+        });
+    }
+})();

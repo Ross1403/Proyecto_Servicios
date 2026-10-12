@@ -198,6 +198,7 @@ unset($_SESSION['flash']);
                         <th>Proyecto</th>
                         <th>Cliente</th>
                         <th>Estado</th>
+                        <th>Avance / Entregable</th>
                         <th>Documentación</th>
                         <th>Logros</th>
                         <th>Destacado</th>
@@ -221,6 +222,36 @@ unset($_SESSION['flash']);
                         </td>
                         <td><?= htmlspecialchars($p['cliente_nombre']) ?></td>
                         <td><span class="badge-admin <?= $pCls ?>"><?= $p['estado'] ?></span></td>
+                        <td>
+                            <?php 
+                                $pct = (int)($p['porcentaje_avance'] ?? 0);
+                                $hasZip = !empty($p['archivo_zip']) && file_exists(__DIR__ . '/../../uploads/proyectos/entregables/' . $p['archivo_zip']);
+                            ?>
+                            <div style="min-width:130px">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span style="font-size:.75rem;font-weight:700;color:var(--text-primary)"><?= $pct ?>%</span>
+                                    <?php if ($hasZip): ?>
+                                    <a href="/Proyecto_Servicios/uploads/proyectos/entregables/<?= urlencode($p['archivo_zip']) ?>" 
+                                       download="<?= htmlspecialchars($p['archivo_zip_nombre'] ?: $p['archivo_zip']) ?>" 
+                                       class="badge-admin badge-dev text-decoration-none" 
+                                       style="padding:0.15rem 0.45rem;font-size:0.7rem"
+                                       title="Descargar <?= htmlspecialchars($p['archivo_zip_nombre'] ?: $p['archivo_zip']) ?>">
+                                        <i class="bi bi-file-earmark-zip-fill text-warning me-1"></i>ZIP
+                                    </a>
+                                    <?php else: ?>
+                                    <span style="font-size:.7rem;color:var(--text-muted)">Sin ZIP</span>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="progress" style="height:6px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden">
+                                    <div class="progress-bar" role="progressbar" style="width: <?= $pct ?>%; background: <?= $pct == 100 ? 'var(--success)' : 'linear-gradient(90deg, var(--primary), #38bdf8)' ?>;" aria-valuenow="<?= $pct ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <?php if (!empty($p['descripcion_avance'])): ?>
+                                <small class="text-truncate d-block mt-1" style="max-width:150px;color:var(--text-muted);font-size:.72rem" title="<?= htmlspecialchars($p['descripcion_avance']) ?>">
+                                    <i class="bi bi-info-circle me-1"></i><?= htmlspecialchars($p['descripcion_avance']) ?>
+                                </small>
+                                <?php endif; ?>
+                            </div>
+                        </td>
                         <td>
                             <div class="d-flex gap-1" style="font-size:.8rem">
                                 <span title="Problema" style="color:<?= empty($p['problema']) ? 'var(--text-muted)' : 'var(--primary-light)' ?>"><i class="bi bi-patch-question-fill"></i></span>

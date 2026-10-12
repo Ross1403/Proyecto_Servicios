@@ -117,17 +117,15 @@ $waNumber = "51999888777"; // Número de la agencia
 <!-- JS público -->
 <script src="<?= $base ?>assets/js/main.js"></script>
 <script>
-// Lógica de Tema Oscuro/Claro (Dark Mode Toggle)
+// Lógica de Tema Oscuro/Claro (Dark Mode Toggle - Senior Pro)
 document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
     const body = document.body;
 
     if (themeToggle) {
         // Cargar preferencia
         if (localStorage.getItem('theme') === 'light') {
             body.classList.add('light-mode');
-            themeIcon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
         }
 
         themeToggle.addEventListener('click', () => {
@@ -135,35 +133,120 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (body.classList.contains('light-mode')) {
                 localStorage.setItem('theme', 'light');
-                themeIcon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
             } else {
                 localStorage.setItem('theme', 'dark');
-                themeIcon.classList.replace('bi-sun-fill', 'bi-moon-stars-fill');
             }
         });
     }
 });
 </script>
 <style>
-/* Base ligera para el Dark Mode toggle si su CSS no tiene soporte nativo aún */
+/* ==========================================================
+   SENIOR PRO DARK/LIGHT MODE 
+   Sobreescritura profunda de variables nativas de style.css
+   ========================================================== */
 body.light-mode {
-    --bg-color: #ffffff;
-    --text-color: #212529;
-    --card-bg: #f8f9fa;
-    --glass-bg: rgba(255, 255, 255, 0.8);
-    background-color: var(--bg-color);
-    color: var(--text-color);
+    /* Fondos - Oscurecemos ligeramente el fondo para que las tarjetas blancas RESALTEN */
+    --dark:          #F0F2F5; /* Gris-azulado sutil tipo UI moderno */
+    --dark-2:        #FFFFFF; /* Footer blanco puro */
+    --dark-3:        #E9ECEF;
+    --dark-card:     #FFFFFF; /* Tarjetas blanco puro, ahora contrastarǭn contra #F0F2F5 */
+    
+    /* Textos */
+    --text-primary:  #1F2937;
+    --text-secondary:#4B5563;
+    --text-muted:    #9CA3AF;
+    
+    /* Efectos Glassmorphism Invertidos */
+    --glass:         rgba(255, 255, 255, 0.9);
+    --glass-border:  rgba(0, 0, 0, 0.08);
+    
+    /* Sombras más suaves para modo claro */
+    --shadow:        0 12px 35px rgba(108, 99, 255, 0.12); /* Sombra morada elegante en hover */
+    --shadow-lg:     0 20px 60px rgba(0, 0, 0, 0.08);
 }
-body.light-mode .navbar {
-    background-color: #ffffff !important;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+/* ==========================================================
+   SENIOR PRO FIX: Hacer que las tarjetas FLOTEN en modo claro
+   ========================================================== */
+body.light-mode .card-glass,
+body.light-mode .project-card,
+body.light-mode .client-card,
+body.light-mode .caso-card,
+body.light-mode .logro-card {
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04); /* Sombra base permanente */
+    border: 1px solid rgba(0, 0, 0, 0.06);
 }
-body.light-mode .navbar .nav-link,
-body.light-mode .navbar .navbar-brand {
-    color: #212529 !important;
+body.light-mode .card-glass:hover,
+body.light-mode .project-card:hover,
+body.light-mode .client-card:hover,
+body.light-mode .caso-card:hover {
+    box-shadow: var(--shadow);
+    border-color: rgba(108, 99, 255, 0.3); /* Borde morado al pasar el mouse */
 }
-body.light-mode #themeToggle {
-    color: #212529 !important;
+
+/* Ajustes específicos para que Navbar y Footer no se rompan */
+body.light-mode #mainNav {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+body.light-mode #mainNav.scrolled {
+    background: rgba(255, 255, 255, 0.98) !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+body.light-mode .navbar-brand,
+body.light-mode .nav-link:hover,
+body.light-mode .nav-link.active {
+    color: #1F2937 !important;
+}
+
+/* ==========================================================
+   ANIMATED TOGGLE SWITCH (UI SENIOR)
+   ========================================================== */
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+}
+.theme-switch {
+    position: relative;
+    width: 52px;
+    height: 28px;
+    background-color: #1A1A2E;
+    border-radius: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 6px;
+    transition: background-color 0.4s ease;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.theme-switch i {
+    font-size: 12px;
+    z-index: 1;
+}
+.theme-switch .bi-moon-fill { color: #8B85FF; }
+.theme-switch .bi-sun-fill { color: #FFB020; }
+
+.theme-switch-indicator {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 22px;
+    height: 22px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 0;
+}
+body.light-mode .theme-switch {
+    background-color: #E9ECEF;
+    border-color: rgba(0,0,0,0.1);
+}
+body.light-mode .theme-switch-indicator {
+    transform: translateX(24px);
+    background-color: #fff;
 }
 </style>
 </body>

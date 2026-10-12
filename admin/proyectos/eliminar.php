@@ -12,20 +12,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $id) {
     try {
         $db = getDB();
         
-        // Obtener la imagen para borrarla físicamente
-        $stmtImg = $db->prepare("SELECT imagen FROM proyectos WHERE id_proyecto = :id");
-        $stmtImg->execute([':id' => $id]);
-        $proyecto = $stmtImg->fetch();
+        // Obtener la imagen y zip para borrarlos físicamente
+        $stmtArchivos = $db->prepare("SELECT imagen, archivo_zip FROM proyectos WHERE id_proyecto = :id");
+        $stmtArchivos->execute([':id' => $id]);
+        $proyecto = $stmtArchivos->fetch();
         
         // Eliminar registro
         $stmt = $db->prepare("DELETE FROM proyectos WHERE id_proyecto = :id");
         $stmt->execute([':id' => $id]);
         
-        // Borrar archivo físico si existe
+        // Borrar imagen si existe
         if ($proyecto && $proyecto['imagen']) {
             $imgPath = __DIR__ . '/../../uploads/proyectos/' . $proyecto['imagen'];
             if (file_exists($imgPath)) {
                 unlink($imgPath);
+            }
+        }
+
+        // Borrar entregable ZIP si existe
+        if ($proyecto && $proyecto['archivo_zip']) {
+            $zipPath = __DIR__ . '/../../uploads/proyectos/entregables/' . $proyecto['archivo_zip'];
+            if (file_exists($zipPath)) {
+                unlink($zipPath);
             }
         }
         
