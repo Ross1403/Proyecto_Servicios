@@ -729,3 +729,233 @@ textarea.form-control-admin { resize: vertical; min-height: 100px; }
 
     .sidebar-overlay.active { display: block; }
 }
+
+/* ============================================================
+   ADMIN THEME SWITCH & LIGHT MODE (SENIOR PRO AVANZADO)
+   ============================================================ */
+
+/* Estilos del Switch Animado Idéntico al Público */
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+}
+.theme-switch {
+    position: relative;
+    width: 52px;
+    height: 28px;
+    background-color: #1A1A2E;
+    border-radius: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 6px;
+    transition: background-color 0.4s ease, border-color 0.4s ease;
+    border: 1px solid rgba(255,255,255,0.1);
+    user-select: none;
+}
+.theme-switch i {
+    font-size: 12px;
+    z-index: 1;
+    pointer-events: none;
+}
+.theme-switch .bi-moon-fill { color: #8B85FF; }
+.theme-switch .bi-sun-fill { color: #FFB020; }
+
+.theme-switch-indicator {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 22px;
+    height: 22px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+    z-index: 0;
+}
+
+/* Estado Claro para el Switch (Idéntico a panel público) */
+body.light-mode .theme-switch {
+    background-color: #E9ECEF;
+    border-color: rgba(0,0,0,0.1);
+}
+body.light-mode .theme-switch-indicator {
+    transform: translateX(24px);
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* ============================================================
+   SOBREESCRITURA DE VARIABLES & COMPONENTES EN MODO CLARO ADMIN
+   ============================================================ */
+html.light-mode,
+body.light-mode {
+    --admin-bg:        #F1F5F9; /* Fondo gris claro suave y limpio */
+    --admin-sidebar:   #FFFFFF; /* Sidebar blanco puro */
+    --admin-card:      #FFFFFF; /* Tarjetas blancas de alto contraste */
+    --admin-card-2:    #F8FAFC; /* Inputs y sub-contenedores */
+    --admin-border:    #E2E8F0; /* Bordes suaves */
+    --admin-hover:     rgba(108, 99, 255, 0.08);
+    --admin-active:    rgba(108, 99, 255, 0.15);
+
+    --text-primary:    #0F172A; /* Slate muy oscuro para máxima legibilidad */
+    --text-secondary:  #334155; /* Texto secundario nítido */
+    --text-muted:      #64748B; /* Muted contrastado */
+
+    background: #F1F5F9 !important;
+    color: #0F172A !important;
+}
+
+/* Alta legibilidad para textos en modo claro */
+body.light-mode .admin-page .text-white:not(.btn):not(.btn *):not(.badge):not(.badge *):not(.toast *) {
+    color: #0F172A !important;
+}
+body.light-mode .table-admin .text-white {
+    color: #0F172A !important;
+}
+
+/* Sidebar en Modo Claro */
+body.light-mode .admin-sidebar {
+    background: #FFFFFF !important;
+    border-right-color: var(--admin-border) !important;
+    box-shadow: 2px 0 16px rgba(0,0,0,0.03);
+}
+body.light-mode .sidebar-brand a {
+    color: var(--text-primary) !important;
+}
+body.light-mode .sidebar-nav .nav-link {
+    color: var(--text-secondary);
+}
+body.light-mode .sidebar-nav .nav-link:hover {
+    color: var(--primary);
+    background: var(--admin-hover);
+}
+body.light-mode .sidebar-nav .nav-link.active {
+    background: linear-gradient(135deg, rgba(108, 99, 255, 0.12), rgba(108, 99, 255, 0.2));
+    color: var(--primary) !important;
+    font-weight: 700;
+}
+body.light-mode .sidebar-label {
+    color: var(--text-muted);
+}
+body.light-mode .sidebar-footer {
+    border-top-color: var(--admin-border);
+    background: #FFFFFF;
+}
+
+/* Topbar en Modo Claro */
+body.light-mode .admin-topbar {
+    background: #FFFFFF !important;
+    border-bottom-color: var(--admin-border) !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+body.light-mode .topbar-title {
+    color: var(--text-primary);
+}
+body.light-mode .topbar-btn {
+    border-color: var(--admin-border);
+    color: var(--text-secondary);
+}
+body.light-mode .topbar-btn:hover {
+    background: var(--admin-hover);
+    color: var(--primary);
+}
+
+/* Tarjetas y Paneles (Admin Cards & Stat Cards) */
+body.light-mode .admin-card,
+body.light-mode .stat-card {
+    background: #FFFFFF !important;
+    border: 1px solid var(--admin-border) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04) !important;
+}
+body.light-mode .admin-card-header {
+    border-bottom-color: var(--admin-border) !important;
+}
+body.light-mode .admin-card-title {
+    color: var(--text-primary) !important;
+}
+body.light-mode .stat-card-value {
+    color: var(--text-primary) !important;
+}
+body.light-mode .stat-card-label {
+    color: var(--text-muted) !important;
+}
+
+/* Tablas Admin en Modo Claro */
+body.light-mode .table-admin th {
+    background: #F8FAFC !important;
+    color: #475569 !important;
+    border-bottom: 1px solid var(--admin-border) !important;
+}
+body.light-mode .table-admin td {
+    color: var(--text-secondary) !important;
+    border-bottom: 1px solid var(--admin-border) !important;
+}
+body.light-mode .table-admin tr:hover td {
+    background: rgba(108, 99, 255, 0.03) !important;
+}
+
+/* Formularios & Inputs */
+body.light-mode .form-control-admin,
+body.light-mode .form-select-admin {
+    background: #FFFFFF !important;
+    border-color: #CBD5E1 !important;
+    color: var(--text-primary) !important;
+}
+body.light-mode .form-control-admin:focus,
+body.light-mode .form-select-admin:focus {
+    border-color: var(--primary) !important;
+    background: #FFFFFF !important;
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15) !important;
+}
+body.light-mode .form-label-admin {
+    color: var(--text-secondary) !important;
+}
+body.light-mode .upload-zone {
+    border-color: #CBD5E1 !important;
+    background: #F8FAFC !important;
+}
+body.light-mode .upload-zone:hover {
+    border-color: var(--primary) !important;
+    background: rgba(108, 99, 255, 0.04) !important;
+}
+
+/* DataTables pagination y search en modo claro */
+body.light-mode .dataTables_wrapper .dataTables_filter input,
+body.light-mode .dataTables_wrapper .dataTables_length select {
+    background: #FFFFFF !important;
+    border-color: #CBD5E1 !important;
+    color: var(--text-primary) !important;
+}
+body.light-mode .dataTables_wrapper .dataTables_info,
+body.light-mode .dataTables_wrapper .dataTables_paginate {
+    color: var(--text-muted) !important;
+}
+body.light-mode .paginate_button {
+    color: var(--text-secondary) !important;
+}
+
+/* Títulos, Breadcrumb y Botones Secundarios */
+body.light-mode .admin-page-title {
+    color: var(--text-primary) !important;
+}
+body.light-mode .admin-page-subtitle {
+    color: var(--text-muted) !important;
+}
+body.light-mode .btn-admin-secondary {
+    background: #F8FAFC !important;
+    border-color: #CBD5E1 !important;
+    color: var(--text-secondary) !important;
+}
+body.light-mode .btn-admin-secondary:hover {
+    background: #E2E8F0 !important;
+    color: var(--text-primary) !important;
+}
+
+/* Ajustes de tarjeta ZIP y Previews en modo claro */
+body.light-mode #zipVisualCard,
+body.light-mode #zipSelectedInfo {
+    background: rgba(245, 158, 11, 0.1) !important;
+    border-color: rgba(245, 158, 11, 0.35) !important;
+}

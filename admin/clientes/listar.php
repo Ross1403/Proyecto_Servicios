@@ -48,7 +48,7 @@ unset($_SESSION['flash']);
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
-    <link rel="stylesheet" href="/Proyecto_Servicios/assets/css/admin.css">
+    <link rel="stylesheet" href="/Proyecto_Servicios/assets/css/admin.css?v=<?= time() ?>">
     <style>
         /* Estilizar los controles inyectados por DataTables para que respeten el diseño oscuro */
         div.dataTables_wrapper div.dataTables_length label,

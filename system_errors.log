@@ -1,0 +1,1 @@
+[2026-10-13 16:38:54] ERROR: SQLSTATE[HY000]: General error: 2006 MySQL server has gone away en C:\xampp\htdocs\Proyecto_Servicios\admin\dashboard.php (Línea 14) | Stack: #0 C:\xampp\htdocs\Proyecto_Servicios\admin\dashboard.php(14): PDO->query('SELECT COUNT(*)...') #1 {main}

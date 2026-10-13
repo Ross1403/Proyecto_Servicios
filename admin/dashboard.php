@@ -82,7 +82,7 @@ $proyectosRecientes = $db->query("
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/Proyecto_Servicios/assets/css/admin.css">
+    <link rel="stylesheet" href="/Proyecto_Servicios/assets/css/admin.css?v=<?= time() ?>">
     <style>
         /* Full Width Ultra-Wide Dashboard (Sin márgenes vacíos a los lados) */
         .admin-page { 
@@ -124,6 +124,14 @@ $proyectosRecientes = $db->query("
             </button>
             <span class="topbar-title">Dashboard</span>
             <div class="topbar-actions">
+                <!-- Theme Toggle Switch -->
+                <div class="theme-switch-wrapper me-2">
+                    <div class="theme-switch" id="adminThemeToggle" aria-label="Cambiar tema" title="Alternar Modo Oscuro/Claro">
+                        <i class="bi bi-moon-fill" style="font-size: 0.75rem;"></i>
+                        <div class="theme-switch-indicator"></div>
+                        <i class="bi bi-sun-fill" style="font-size: 0.75rem;"></i>
+                    </div>
+                </div>
                 <?php if ($mensajesNuevos > 0): ?>
                 <a href="/Proyecto_Servicios/admin/contactos/listar.php" class="topbar-btn" title="<?= $mensajesNuevos ?> mensajes nuevos">
                     <i class="bi bi-envelope-fill"></i>
@@ -513,7 +521,7 @@ $proyectosRecientes = $db->query("
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="/Proyecto_Servicios/assets/js/admin.js"></script>
+<script src="/Proyecto_Servicios/assets/js/admin.js?v=<?= time() ?>"></script>
 <script>
 // Chart.js — Proyectos por cliente
 const ctx = document.getElementById('chartProyectos').getContext('2d');

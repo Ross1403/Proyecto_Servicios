@@ -358,3 +358,54 @@ document.head.appendChild(style);
         });
     }
 })();
+
+
+// ============================================================
+// ADMIN THEME TOGGLE CONTROLLER (SENIOR PRO — MODO OSCURO/CLARO)
+// ============================================================
+(function () {
+    function initAdminTheme() {
+        const body = document.body;
+        const html = document.documentElement;
+
+        // 1. Restaurar preferencia guardada si no se había aplicado
+        const savedTheme = localStorage.getItem('admin_theme') || localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            body.classList.add('light-mode');
+            html.classList.add('light-mode');
+        } else if (savedTheme === 'dark') {
+            body.classList.remove('light-mode');
+            html.classList.remove('light-mode');
+        }
+
+        // 2. Si no fue enlazado por admin-sidebar, enlazar de forma segura
+        if (!window.__adminThemeListenerBound) {
+            window.__adminThemeListenerBound = true;
+            document.addEventListener('click', function (e) {
+                const btn = e.target.closest('#adminThemeToggle, #themeToggle, .theme-switch');
+                if (btn) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (typeof window.toggleAdminTheme === 'function') {
+                        window.toggleAdminTheme();
+                    } else {
+                        const isLight = body.classList.toggle('light-mode');
+                        html.classList.toggle('light-mode', isLight);
+                        const newTheme = isLight ? 'light' : 'dark';
+                        localStorage.setItem('admin_theme', newTheme);
+                        localStorage.setItem('theme', newTheme);
+                        if (typeof showToast === 'function') {
+                            showToast(isLight ? 'Modo Claro activado' : 'Modo Oscuro activado', 'info');
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAdminTheme);
+    } else {
+        initAdminTheme();
+    }
+})();
